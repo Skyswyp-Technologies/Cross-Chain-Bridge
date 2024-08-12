@@ -1,0 +1,110 @@
+import { HardhatUserConfig } from "hardhat/config";
+import "@nomicfoundation/hardhat-toolbox";
+import "@nomicfoundation/hardhat-chai-matchers"
+import "hardhat-deploy"
+import "hardhat-contract-sizer"
+
+import { load } from "ts-dotenv";
+import { version } from "hardhat";
+
+const env = load({
+  MAINNET: String,
+  ETHERSCAN_API_KEY: String,
+  PRIVATE_KEY: String,
+  REPORT_GAS: Boolean,
+  FORKING_BLOCK_NUMBER: String,
+  OPT_MAIN: String,
+  ARB_MAIN: String,
+  BASE: String
+})
+
+
+const COMPILER_SETTINGS = {
+  optimizer: {
+      enabled: true,
+      runs: 1000000,
+  },
+  metadata: {
+      bytecodeHash: "none",
+  },
+}
+
+const config: HardhatUserConfig = {
+  defaultNetwork: "hardhat",
+  networks: {
+      hardhat: {
+          hardfork: "merge",
+          // If you want to do some forking set `enabled` to true
+          forking: {
+              url: env.MAINNET,
+              blockNumber: Number(env.FORKING_BLOCK_NUMBER),
+              enabled: false,
+          },
+          chainId: 1337,
+      },
+      localhost: {
+          chainId: 1337,
+    },
+    mainnet: {
+        url: env.MAINNET !== undefined ? env.MAINNET : "",
+        accounts: env.PRIVATE_KEY !== undefined ? [env.PRIVATE_KEY] : [],
+        saveDeployments: true,
+        chainId: 1,
+    },
+    base: {
+      url: env.BASE,
+      accounts: env.PRIVATE_KEY !== undefined ? [env.PRIVATE_KEY] : [],
+      saveDeployments: true,
+      chainId: 8453,
+    },
+    optimism: {
+      url: env.OPT_MAIN,
+      accounts: env.PRIVATE_KEY !== undefined ? [env.PRIVATE_KEY] : [],
+      chainId: 10,
+      saveDeployments: true,
+    },
+    arb: {
+      url: env.ARB_MAIN,
+      accounts: env.PRIVATE_KEY !== undefined ? [env.PRIVATE_KEY] : [],
+      chainId: 42161,
+      saveDeployments: true,
+    },
+  },
+  etherscan: {
+      // yarn hardhat verify --network <NETWORK> <CONTRACT_ADDRESS> <CONSTRUCTOR_PARAMETERS>
+      apiKey: {
+          // npx hardhat verify --list-networks
+          mainnet: env.ETHERSCAN_API_KEY,
+          base: 'your API key',
+          arb: 'your API key',
+          optimism: 'your API key',
+      },
+  },
+  gasReporter: {
+      enabled: true,//env.REPORT_GAS !== undefined,
+      outputFile: "gas-report.txt",
+      noColors: false,
+      // coinmarketcap: process.env.COINMARKETCAP_API_KEY,
+  },
+      contractSizer: {
+        runOnCompile: false,
+        only: [],//specify contracts
+    },
+  solidity: {
+      compilers: [
+          {
+              version: "0.8.22",
+              settings: COMPILER_SETTINGS
+          },
+      ],
+  },
+  mocha: {
+      timeout: 200000, // 200 seconds max for running tests
+  },
+  typechain: {
+      outDir: "typechain",
+      target: "ethers-v5",
+  },
+}
+
+export default config
