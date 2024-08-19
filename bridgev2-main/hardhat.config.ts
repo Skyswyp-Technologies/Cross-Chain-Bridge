@@ -11,13 +11,11 @@ const env = load({
   MAINNET: String,
   ETHERSCAN_API_KEY: String,
   PRIVATE_KEY: String,
-  REPORT_GAS: Boolean,
-  FORKING_BLOCK_NUMBER: String,
+ // REPORT_GAS: Boolean,
   OPT_MAIN: String,
   ARB_MAIN: String,
   BASE: String
 })
-
 
 const COMPILER_SETTINGS = {
   optimizer: {
@@ -30,21 +28,8 @@ const COMPILER_SETTINGS = {
 }
 
 const config: HardhatUserConfig = {
-  defaultNetwork: "hardhat",
+  defaultNetwork: "mainnet",
   networks: {
-      hardhat: {
-          hardfork: "merge",
-          // If you want to do some forking set `enabled` to true
-          forking: {
-              url: env.MAINNET,
-              blockNumber: Number(env.FORKING_BLOCK_NUMBER),
-              enabled: false,
-          },
-          chainId: 1337,
-      },
-      localhost: {
-          chainId: 1337,
-    },
     mainnet: {
         url: env.MAINNET !== undefined ? env.MAINNET : "",
         accounts: env.PRIVATE_KEY !== undefined ? [env.PRIVATE_KEY] : [],

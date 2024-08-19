@@ -4,6 +4,8 @@ pragma solidity ^0.8.22;
 
 import {OAppSender, MessagingFee} from "@layerzerolabs/lz-evm-oapp-v2/contracts/oapp/OAppSender.sol";
 import {OApp} from "@layerzerolabs/lz-evm-oapp-v2/contracts/oapp/OApp.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {OAppReceiver, Origin} from "@layerzerolabs/lz-evm-oapp-v2/contracts/oapp/OAppReceiver.sol";
 import {OptionsBuilder} from "@layerzerolabs/lz-evm-oapp-v2/contracts/oapp/libs/OptionsBuilder.sol";
@@ -50,7 +52,7 @@ pragma solidity ^0.8.13;
 error Token__Not__Whitelisted(address tokenName);
 error Native__Transfer__Failed(address _receiver);
 
-contract BridgeV2 is OApp, AccessControl {
+contract BridgeV2 is OApp, UUPSUpgradeable, AccessControl {
     //stores the failed values of a native token incase balance is not enough on dest
     mapping(address => uint256) public failedNativeTransfer;
 
@@ -118,18 +120,24 @@ contract BridgeV2 is OApp, AccessControl {
         address _endpoint,
         address _owner,
         string memory chainName //the chain this bridge is deplyed: should be nave token initials
-    ) OApp(_endpoint, _owner) Ownable(_owner) {
+    ) OApp(_endpoint, _owner)  Ownable(msg.sender) {
+
+        __UUPSUpgradeable_init();
         _grantRole(DEFAULT_ADMIN_ROLE, _owner);
         nameToNative[chainName] = true;
-        //isWhitelistedAdd[address(0)] = true;
-        //isWhitelistedName[chainName] = true;
-        //whitelistedTokenName[address(0)] = chainName;
-        //whitelistedTokenAddress[chainName] = address(0);
-        //mapWhiltelistTokenNames[chainName] = whitelistedTokenNames.length;
-        //whitelistedTokenNames.push(chainName);
-        //defaultGas = 500000;
-        //bridgeFeePercent = 5;
+        isWhitelistedAdd[address(0)] = true;
+        isWhitelistedName[chainName] = true;
+        whitelistedTokenName[address(0)] = chainName;
+        whitelistedTokenAddress[chainName] = address(0);
+        mapWhiltelistTokenNames[chainName] = whitelistedTokenNames.length;
+        whitelistedTokenNames.push(chainName);
+        defaultGas = 500000;
+        bridgeFeePercent = 5;
     }
+
+
+    function _authorizeUpgrade(address) internal override onlyOwner {}
+
 
     function getMessage(
         uint256 amount,
@@ -138,17 +146,7 @@ contract BridgeV2 is OApp, AccessControl {
         string memory tokenName = whitelistedTokenName[tokenAddress];
         payload = abi.encode(tokenName, msg.sender, amount);
     }
-
-    function getGas(
-        uint32 _dstEid,
-        bytes memory _message,
-        uint128 gas
-    ) external view returns (MessagingFee memory fee) {
-        bytes memory _options = getLzReceiveOption(gas, 0);
-
-        fee = _quote(_dstEid, _message, _options, false);
-    }
-
+    
     function getFee(
         uint32 _dstEid,
         bytes memory _message,
@@ -268,6 +266,7 @@ contract BridgeV2 is OApp, AccessControl {
         return true;
     }
 
+  
     /**
      * @notice used to deposit nave tokens to the contract
      * @param _destEid destination chain l0 ID
