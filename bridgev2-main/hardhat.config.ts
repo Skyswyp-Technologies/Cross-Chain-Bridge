@@ -34,7 +34,7 @@ const config: HardhatUserConfig = {
         url: env.MAINNET !== undefined ? env.MAINNET : "",
         accounts: env.PRIVATE_KEY !== undefined ? [env.PRIVATE_KEY] : [],
         saveDeployments: true,
-        chainId: 1,
+        chainId: 11155111,
     },
     base: {
       url: env.BASE,
@@ -51,7 +51,7 @@ const config: HardhatUserConfig = {
     arb: {
       url: env.ARB_MAIN,
       accounts: env.PRIVATE_KEY !== undefined ? [env.PRIVATE_KEY] : [],
-      chainId: 42161,
+      chainId: 421614,
       saveDeployments: true,
     },
   },

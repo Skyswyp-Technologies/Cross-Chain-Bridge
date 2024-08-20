@@ -4,9 +4,9 @@ import {load} from "ts-dotenv";
 
 async function main() {
 
-  const env = load({
-    ENVIRONMENT: String
-  });
+  // const env = load({
+  //   ENVIRONMENT: String
+  // });
 
   //const chainDetails = env.ENVIRONMENT == "dev"? ENDPONTS.TESTNET : ENDPONTS.TESTNET;
 //
@@ -17,11 +17,11 @@ async function main() {
   
   const Bridge = await ethers.getContractFactory("BridgeV2");
 
-      const bridge = await Bridge.deploy("0x464570adA09869d8741132183721B4f0769a0287", account, "MATIC");
+      const bridge = await Bridge.deploy("0x6EDCE65403992e310A62460808c4b910D972f10f", "0x25F0105CBca79C300Efe203503AF091c0dfF1FC3", "ETH");
   
       await bridge.waitForDeployment();
 
-      console.log(`Bridge on ${40106} deployed to: ${bridge.target}`);
+      console.log(`Bridge on deployed to: ${bridge.target}`);
 
 }
 
