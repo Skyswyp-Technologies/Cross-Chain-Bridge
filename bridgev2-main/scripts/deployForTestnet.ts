@@ -21,6 +21,8 @@ async function main() {
   
       await bridge.waitForDeployment();
 
+      
+
       console.log(`Bridge on deployed to: ${bridge.target}`);
 
 }
@@ -29,3 +31,6 @@ main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });
+
+//testnet sepoila: 0xb00B9847DEa29d71846D549BD22E4a5bd5b75d07
+//arb sepolia: 0x3AF7D19aAeCf142C91FF1A8575A316807a0f611A

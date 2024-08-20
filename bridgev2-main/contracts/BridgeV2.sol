@@ -52,7 +52,7 @@ pragma solidity ^0.8.13;
 error Token__Not__Whitelisted(address tokenName);
 error Native__Transfer__Failed(address _receiver);
 
-contract BridgeV2 is OApp, UUPSUpgradeable, AccessControl {
+contract BridgeV2 is OApp, Initializable, UUPSUpgradeable, AccessControl {
     //stores the failed values of a native token incase balance is not enough on dest
     mapping(address => uint256) public failedNativeTransfer;
 
@@ -122,7 +122,6 @@ contract BridgeV2 is OApp, UUPSUpgradeable, AccessControl {
         string memory chainName //the chain this bridge is deplyed: should be nave token initials
     ) OApp(_endpoint, _owner)  Ownable(msg.sender) {
 
-        __UUPSUpgradeable_init();
         _grantRole(DEFAULT_ADMIN_ROLE, _owner);
         nameToNative[chainName] = true;
         isWhitelistedAdd[address(0)] = true;
@@ -135,6 +134,9 @@ contract BridgeV2 is OApp, UUPSUpgradeable, AccessControl {
         bridgeFeePercent = 5;
     }
 
+    function initialize() external initializer {
+        UUPSUpgradeable.__UUPSUpgradeable_init();
+    }
 
     function _authorizeUpgrade(address) internal override onlyOwner {}
 

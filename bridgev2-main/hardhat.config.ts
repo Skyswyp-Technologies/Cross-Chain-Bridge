@@ -1,8 +1,10 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
-import "@nomicfoundation/hardhat-chai-matchers"
-import "hardhat-deploy"
-import "hardhat-contract-sizer"
+import "@nomicfoundation/hardhat-chai-matchers";
+import "@nomicfoundation/hardhat-verify";
+import "@nomicfoundation/hardhat-ethers";
+import "hardhat-deploy";
+import "hardhat-contract-sizer";
 
 import { load } from "ts-dotenv";
 import { version } from "hardhat";
@@ -60,6 +62,7 @@ const config: HardhatUserConfig = {
       apiKey: {
           // npx hardhat verify --list-networks
           mainnet: env.ETHERSCAN_API_KEY,
+          sepolia: env.ETHERSCAN_API_KEY,
           base: 'your API key',
           arb: 'your API key',
           optimism: 'your API key',
