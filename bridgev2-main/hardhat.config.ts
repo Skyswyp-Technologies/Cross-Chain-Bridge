@@ -5,6 +5,8 @@ import "@nomicfoundation/hardhat-verify";
 import "@nomicfoundation/hardhat-ethers";
 import "hardhat-deploy";
 import "hardhat-contract-sizer";
+import "@openzeppelin/hardhat-upgrades";
+
 
 import { load } from "ts-dotenv";
 import { version } from "hardhat";
@@ -64,7 +66,7 @@ const config: HardhatUserConfig = {
           mainnet: env.ETHERSCAN_API_KEY,
           sepolia: env.ETHERSCAN_API_KEY,
           base: 'your API key',
-          arb: 'your API key',
+          arb: '',
           optimism: 'your API key',
       },
   },

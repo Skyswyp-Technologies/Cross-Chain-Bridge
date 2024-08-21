@@ -52,7 +52,7 @@ pragma solidity ^0.8.13;
 error Token__Not__Whitelisted(address tokenName);
 error Native__Transfer__Failed(address _receiver);
 
-contract BridgeV2 is OApp, Initializable, UUPSUpgradeable, AccessControl {
+contract BridgeV2 is OApp, AccessControl {
     //stores the failed values of a native token incase balance is not enough on dest
     mapping(address => uint256) public failedNativeTransfer;
 
@@ -133,12 +133,6 @@ contract BridgeV2 is OApp, Initializable, UUPSUpgradeable, AccessControl {
         defaultGas = 500000;
         bridgeFeePercent = 5;
     }
-
-    function initialize() external initializer {
-        UUPSUpgradeable.__UUPSUpgradeable_init();
-    }
-
-    function _authorizeUpgrade(address) internal override onlyOwner {}
 
 
     function getMessage(
