@@ -7,7 +7,7 @@ import { Options } from "@layerzerolabs/lz-v2-utilities";
 
 async function main() {
 
-  const amount = ethers.parseEther("10"); // 10 tokens
+  const amount = ethers.parseEther("15"); // 15
   const tokenAddress = "0x84cba2A35398B42127B3148744DB3Cd30981fCDf";
 
 

@@ -137,10 +137,11 @@ contract BridgeV2 is OApp, AccessControl {
 
     function getMessage(
         uint256 amount,
-        address tokenAddress
+        address tokenAddress,
+        address receiver
     ) public view returns (bytes memory payload) {
         string memory tokenName = whitelistedTokenName[tokenAddress];
-        payload = abi.encode(tokenName, msg.sender, amount);
+        payload = abi.encode(tokenName, receiver, amount);
     }
     
     function getFee(
@@ -274,7 +275,8 @@ contract BridgeV2 is OApp, AccessControl {
         uint32 _destEid,
         uint256 amount,
         address tokenAddress,
-        string memory destChain
+        string memory destChain,
+        address receiver
     ) external payable returns (bool) {
         require(isBlocked != true, "blocked");
         require(
@@ -290,7 +292,7 @@ contract BridgeV2 is OApp, AccessControl {
 
         bytes memory _options = getLzReceiveOption(defaultGas, 0);
 
-        bytes memory payload = getMessage(amount, tokenAddress);
+        bytes memory payload = getMessage(amount, receiver, tokenAddress);
 
         MessagingFee memory fee = getFee(_destEid, payload, _options);
 

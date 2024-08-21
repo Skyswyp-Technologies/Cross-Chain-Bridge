@@ -33,7 +33,7 @@ main().catch((error) => {
   process.exitCode = 1;
 });
 
-//testnet sepoila: 0xeEd454c51994c592bB7CEcd5E6472d461B3d7afb
-//arb sepolia: 0xcF448d11D45d50A56CA32e17fbdAbF26cd485D68
-//alpha: 0x84cba2A35398B42127B3148744DB3Cd30981fCDf
+//bridge testnet sepoila: 0xeEd454c51994c592bB7CEcd5E6472d461B3d7afb
+//bridge arb sepolia: 0xcF448d11D45d50A56CA32e17fbdAbF26cd485D68
+//alpha token sepolia: 0x84cba2A35398B42127B3148744DB3Cd30981fCDf
 //alpha arb: 0x43535C041AF9d270Bd7aaA9ce5313d960BBEABAD
