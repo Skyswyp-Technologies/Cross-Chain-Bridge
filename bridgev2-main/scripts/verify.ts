@@ -2,11 +2,13 @@ import {run} from "hardhat";
 
 async function main() {
     //deployed contract address
-    const contractAddress = "0x84cba2A35398B42127B3148744DB3Cd30981fCDf";
+    const contractAddress = "0x9d3Eef214Dab3E607fa2B1F962c685EB132Ba9Ed";
   
     // constructor arguments
     const constructorArguments = [
-      "0x25F0105CBca79C300Efe203503AF091c0dfF1FC3"
+      "0x6EDCE65403992e310A62460808c4b910D972f10f",
+      "0x25F0105CBca79C300Efe203503AF091c0dfF1FC3",
+      "ETH"
     ];
   
     try {
