@@ -7,43 +7,44 @@ import { Options } from "@layerzerolabs/lz-v2-utilities";
 
 async function main() {
 
-  const amount = ethers.parseEther("15"); // 15
-  const tokenAddress = "0x84cba2A35398B42127B3148744DB3Cd30981fCDf";
+  const amount = ethers.parseEther("5"); // 5
+ // const tokenAddress = "0x43535C041AF9d270Bd7aaA9ce5313d960BBEABAD";
 
 
   // const chainId = await getChainId();
   const Bridge = await ethers.getContractFactory("BridgeV2");
   const Token = await ethers.getContractFactory("AlphaToken");
-  const destEid = 40231;
+  const destEid = 40161;
 
   // chainDetails.forEach( async (dets) =>{
   //   if (chainId === dets.chainID.toString()) {
 
 
-  const bridge = Bridge.attach("0xeEd454c51994c592bB7CEcd5E6472d461B3d7afb");
+  const bridge = Bridge.attach("0x980B2F387BBECD67d94B2b6Eebd4FD238946466a");
 
   //   console.log("setting bridge address..");
-  //   await bridge.setBridgeFeeAddress("0xe6d7058E1D37a55A5352ff329E77240394604822");
+  //   await bridge.setPeer("0xe6d7058E1D37a55A5352ff329E77240394604822");
   //   console.log("set!");
 
   console.log("Estimating fee....");
-  const payload = await bridge.getMessage(amount, tokenAddress);
+  const payload = await bridge.getMessage(amount, "0x43535C041AF9d270Bd7aaA9ce5313d960BBEABAD", "0x5682bce3c6e4831503c4C3a9f0Db81ff61EF72a5");
   const options = await bridge.getLzReceiveOption("500000", "0");
   const fee = await bridge.getFee(destEid, payload, options);
-  console.log("fee is set!")
+  console.log(`Fee is set: ${fee.nativeFee}`);
 
 
-  const token = Token.attach("0x84cba2A35398B42127B3148744DB3Cd30981fCDf");
+  const token = Token.attach("0x43535C041AF9d270Bd7aaA9ce5313d960BBEABAD");
   console.log("Approving bridge...");
-  await token.approve("0xeEd454c51994c592bB7CEcd5E6472d461B3d7afb", amount);
+  await token.approve("0x980B2F387BBECD67d94B2b6Eebd4FD238946466a", amount);
   console.log("Approved!");
 
 
   console.log("Sending token deposit to Bridge...");
-  const tx = await bridge.deposit(destEid, amount, tokenAddress, "ETH", {
+  const tx = await bridge.deposit(destEid, amount, "0x43535C041AF9d270Bd7aaA9ce5313d960BBEABAD", "ETH", "0x5682bce3c6e4831503c4C3a9f0Db81ff61EF72a5", {
+    gasLimit:100000,
     value: fee.nativeFee // Send the necessary fee along with the transaction
   });
-
+  console.log(`Fee: ${fee.nativeFee}`)
   console.log(`Your tokens amount: ${amount} is bridged successfully!`);
   
 }

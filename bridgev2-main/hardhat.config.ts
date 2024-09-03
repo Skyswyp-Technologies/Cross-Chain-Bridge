@@ -63,10 +63,10 @@ const config: HardhatUserConfig = {
       // yarn hardhat verify --network <NETWORK> <CONTRACT_ADDRESS> <CONSTRUCTOR_PARAMETERS>
       apiKey: {
           // npx hardhat verify --list-networks
+          arb: env.ETHERSCAN_API_KEY,
           mainnet: env.ETHERSCAN_API_KEY,
           sepolia: env.ETHERSCAN_API_KEY,
           base: 'your API key',
-          arb: '',
           optimism: 'your API key',
       },
   },
