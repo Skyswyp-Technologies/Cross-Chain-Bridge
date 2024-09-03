@@ -292,7 +292,7 @@ contract BridgeV2 is OApp, AccessControl {
 
         bytes memory _options = getLzReceiveOption(defaultGas, 0);
 
-        bytes memory payload = getMessage(amount, receiver, tokenAddress);
+        bytes memory payload = getMessage(amount, tokenAddress, receiver);
 
         MessagingFee memory fee = getFee(_destEid, payload, _options);
 
