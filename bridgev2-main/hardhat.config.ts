@@ -44,7 +44,7 @@ const config: HardhatUserConfig = {
       url: env.BASE,
       accounts: env.PRIVATE_KEY !== undefined ? [env.PRIVATE_KEY] : [],
       saveDeployments: true,
-      chainId: 8453,
+      chainId: 84532,
     },
     optimism: {
       url: env.OPT_MAIN,
@@ -63,10 +63,10 @@ const config: HardhatUserConfig = {
       // yarn hardhat verify --network <NETWORK> <CONTRACT_ADDRESS> <CONSTRUCTOR_PARAMETERS>
       apiKey: {
           // npx hardhat verify --list-networks
-          arb: env.ETHERSCAN_API_KEY,
-          mainnet: env.ETHERSCAN_API_KEY,
-          sepolia: env.ETHERSCAN_API_KEY,
-          base: 'your API key',
+         // arb: env.ETHERSCAN_API_KEY,
+         // mainnet: env.ETHERSCAN_API_KEY,
+         // sepolia: env.ETHERSCAN_API_KEY,
+          baseSepolia: env.ETHERSCAN_API_KEY,
           optimism: 'your API key',
       },
   },
