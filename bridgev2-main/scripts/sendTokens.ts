@@ -7,14 +7,14 @@ import { Options } from "@layerzerolabs/lz-v2-utilities";
 
 async function main() {
 
-  const amount = ethers.parseEther("1000000"); // 5
- const tokenAddress = "0x84cba2A35398B42127B3148744DB3Cd30981fCDf";
+//   const amount = ethers.parseEther("1000000"); // 5
+//  const tokenAddress = "0x84cba2A35398B42127B3148744DB3Cd30981fCDf";
 
 
-  // const chainId = await getChainId();
-  const Bridge = await ethers.getContractFactory("BridgeV2");
-  const Token = await ethers.getContractFactory("AlphaToken");
-  const destEid = 40245;   
+//   // const chainId = await getChainId();
+//   const Bridge = await ethers.getContractFactory("BridgeV2");
+const Token = await ethers.getContractFactory("AlphaToken");
+//   const destEid = 40245;   
   
   //40161 --eth testnet Eid
 
@@ -22,11 +22,11 @@ async function main() {
   //   if (chainId === dets.chainID.toString()) {
 
 
-  const bridge = Bridge.attach("0x74FCAE483Cd97791078B8E6073757e04356C20bd");
+  // const bridge = Bridge.attach("0x74FCAE483Cd97791078B8E6073757e04356C20bd");
 
-    console.log("setting bridge peer..");
-    await bridge.setPeer(destEid, "0x000000000000000000000000f762f004a30CB141d139C900f2Aa3631Db7FD2E7");
-    console.log("set!");
+  //   console.log("setting bridge peer..");
+  //   await bridge.setPeer(destEid, "0x000000000000000000000000f762f004a30CB141d139C900f2Aa3631Db7FD2E7");
+  //   console.log("set!");
 
     // console.log("Whitelisting bridge token....");
     // await bridge.whitelistToken("0x2816a02000B9845C464796b8c36B2D5D199525d5", "USDT");
@@ -42,11 +42,10 @@ async function main() {
   // const fee = await bridge.getFee(destEid, payload, options);
   // console.log(`Fee is set: ${fee.nativeFee}`);
 
-
-  // const token = Token.attach("0x2816a02000B9845C464796b8c36B2D5D199525d5");
-  // console.log("approve bridge...");
-  // await token.mint("0xf762f004a30CB141d139C900f2Aa3631Db7FD2E7", amount);
-  // console.log("mint!");
+  console.log("transfer ownership....");
+  const token = Token.attach("0x43535C041AF9d270Bd7aaA9ce5313d960BBEABAD");
+  await token.transferOwnership("0x8F4916E8Bc834451AAc5377130016EDb1B2df09B");
+  console.log("tranferred...");
 
 
   // console.log("Sending token deposit to Bridge...");

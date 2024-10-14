@@ -49,7 +49,7 @@ const config: HardhatUserConfig = {
     optimism: {
       url: env.OPT_MAIN,
       accounts: env.PRIVATE_KEY !== undefined ? [env.PRIVATE_KEY] : [],
-      chainId: 10,
+      chainId: 11155420,
       saveDeployments: true,
     },
     arb: {
