@@ -2,7 +2,7 @@ import {run} from "hardhat";
 
 async function main() {
     //deployed contract address
-    const contractAddress = "0x2816a02000B9845C464796b8c36B2D5D199525d5";
+    const contractAddress = "0xD523A486A536A4cFe62FA3e4280e7A8977B5AF6b";
   
     // constructor arguments
     const constructorArguments = [
@@ -15,8 +15,8 @@ async function main() {
       console.log(`Verifying contract at address: ${contractAddress}`);
       
       await run("verify:verify", {
-        address: contractAddress,
-        constructorArguments: constructorArguments,
+        address: contractAddress
+        //constructorArguments: constructorArguments,
       });
   
       console.log("Contract verified successfully!");

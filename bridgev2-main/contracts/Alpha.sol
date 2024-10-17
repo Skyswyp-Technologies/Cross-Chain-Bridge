@@ -1,17 +1,16 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.22;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 
-contract AlphaToken is ERC20, Ownable, ERC20Permit {
+contract USDCCToken is ERC20, Ownable, ERC20Permit {
     constructor(
-        address initialOwner
     )
-        ERC20("Alpha Token", "ALPHA")
-        Ownable(initialOwner)
-        ERC20Permit("Alpha Token")
+        ERC20("USDC Coin", "USDCC")
+        Ownable(msg.sender)
+        ERC20Permit("USDCC")
     {}
 
     function mint(address to, uint256 amount) public onlyOwner {

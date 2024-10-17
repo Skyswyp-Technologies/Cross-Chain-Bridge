@@ -109,16 +109,12 @@ contract Pool is Initializable, UUPSUpgradeable, OwnableUpgradeable, ReentrancyG
   Token[] public tokensForLending;
   Token[] public tokensForBorrowing;
 
-  IPoolToken public PoolToken;
-
   uint256 public noOfTokensLent;
   uint256 public noOfTokensBorrowed;
 
-  function initialize(address _token, address _initialOwner) external initializer() {
+  function initialize(address _initialOwner) external initializer() {
     UUPSUpgradeable.__UUPSUpgradeable_init();
     _transferOwnership(_initialOwner);
-     PoolToken = IPoolToken(_token);
-
      noOfTokensLent = 0;
      noOfTokensBorrowed = 0;
   }
@@ -204,8 +200,6 @@ contract Pool is Initializable, UUPSUpgradeable, OwnableUpgradeable, ReentrancyG
       tokensLentAmount[tokenAddress][msg.sender] = amount;
       tokensLent[noOfTokensLent++][msg.sender] = tokenAddress;
     }
-
-    rewardUserToken(msg.sender, tokenAddress, amount);
 
     emit Supply(msg.sender, lenders, tokensLentAmount[tokenAddress][msg.sender]);
   }
@@ -319,13 +313,7 @@ contract Pool is Initializable, UUPSUpgradeable, OwnableUpgradeable, ReentrancyG
     );
 
     uint256 PoolTokenToRemove = getAmountInDollars(amount, tokenAddress);
-    uint256 PoolTokenBalance = PoolToken.balanceOfUser(msg.sender);
 
-    if (PoolTokenToRemove <= PoolTokenBalance) {
-      PoolToken.burn(msg.sender, PoolTokenToRemove);
-    } else {
-      PoolToken.burn(msg.sender, PoolTokenBalance);
-    }
      //interest for suppliers
     for (uint256 j = 0; j < tokensForLending.length; j++) {
           Token memory currentTokenForLending = tokensForLending[j];
@@ -550,14 +538,6 @@ contract Pool is Initializable, UUPSUpgradeable, OwnableUpgradeable, ReentrancyG
     return false;
   }
 
-  function rewardUserToken(address user, address tokenAddress, uint256 amount) private {
-    // Send some tokens to the user equivalent to the token amount lent.
-    if (amount == 0) revert InvalidAmount();
-
-    uint256 amountIndollars = getAmountInDollars(amount, tokenAddress);
-    //mint 
-    PoolToken.mint(user, amountIndollars);
-  }
 
   function getAmountInDollars(uint256 amount, address tokenAddress) public view returns (uint256) {
     uint256 dollarPerToken = oneTokenEqualsHowManyDollars(tokenAddress);
