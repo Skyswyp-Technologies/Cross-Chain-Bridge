@@ -175,7 +175,7 @@ contract Pool is Initializable, UUPSUpgradeable, OwnableUpgradeable, ReentrancyG
   function getTokensForBorrowingArray() public view returns (Token[] memory) {
     return tokensForBorrowing;
   }
-
+  
   function supply(address tokenAddress, uint256 amount) external payable nonReentrant {
  if (!tokenIsAllowed(tokenAddress, tokensForLending)) {
     revert TokenNotSupported();

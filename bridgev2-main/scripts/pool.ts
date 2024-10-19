@@ -10,8 +10,8 @@ async function main() {
 
    // gnUSD plume has 18 decimal places like ETH
 const amount = parseUnits("1", 6); 
-const RateForLending = parseUnits("0.9", 18);
-const amountForBorrowing = parseUnits("0.8", 18); // Similarly for borrowing
+const RateForLending = parseUnits("0.95", 18); //ltv
+const amountForBorrowing = parseUnits("0.95", 18); // ltv
 const interestRateForLending = parseUnits("0.1", 18);
 const interestRateForBorrowing = parseUnits("0.09", 18); 
 const price = parseUnits("1", 18); 
@@ -40,12 +40,12 @@ const duration = parseUnits("5", 18);
 
 //  console.log("pool set...");
 
-// pool.addTokensForLending("USDCC", "0x5d3398142E393bB4BBFF6f67a3778322d3F9D90B", RateForLending, interestRateForLending);
+// pool.addTokensForLending("QTM", "0x2898dE208BC827089BD41131F09423E554c51a11", RateForLending, interestRateForLending);
 // console.log("token set for lending");
 
 console.log("token for borrowing...");
 
-pool.addTokensForBorrowing("USDCC", "0x5d3398142E393bB4BBFF6f67a3778322d3F9D90B", amountForBorrowing, interestRateForBorrowing);
+pool.addTokensForBorrowing("QTM", "0x2898dE208BC827089BD41131F09423E554c51a11", amountForBorrowing, interestRateForBorrowing);
 console.log("token set for borrowing");
 
 // console.log("oracle set...");

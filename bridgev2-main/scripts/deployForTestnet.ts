@@ -13,7 +13,12 @@ async function main() {
   //const chainId = await getChainId();
   // const [account] = await getUnnamedAccounts();
 
-  // const Bridge: any = await ethers.getContractFactory("BridgeV2");
+  //  const Bridge: any = await ethers.getContractFactory("BridgeV2");
+  //  const bridge =  Bridge.attach("0x74FCAE483Cd97791078B8E6073757e04356C20bd");
+  //  console.log("whitelist bridge token..");
+  //  await bridge.whitelistToken("0x9bD5bf31c44F7c81F6E6782447e00AE40CFFDcD6", "QTM");
+  //  console.log("token set..");
+
   // const bridge = await Bridge.deploy("0x6EDCE65403992e310A62460808c4b910D972f10f","0x25F0105CBca79C300Efe203503AF091c0dfF1FC3", "OPTIMISM");
   // await bridge.waitForDeployment(); 
 
@@ -26,7 +31,7 @@ async function main() {
   // console.log(" deployed...", pool.target);
 
 
-  const Nft = await ethers.getContractFactory("USDCCToken");
+  const Nft = await ethers.getContractFactory("Quantum");
   const debtToken = await Nft.deploy();
   await debtToken.waitForDeployment();
   console.log("deployed token..", debtToken.target);
@@ -47,3 +52,8 @@ main().catch((error) => {
 //base oracle: 0x30d96E0c312098C8a40db596B95326ba8e2726F8
 //base lending: 0x8e0Be06D13d8B9c4ed8F866D946e87fFFf469205
 //base USDCC: 0x5d3398142E393bB4BBFF6f67a3778322d3F9D90B
+//base USDTC: 0x567319975c42BaFdf80B42222340A9Cc8015693e
+//KES base: 0x348490F429cb31A4E45a2323f359880302227fDA
+//base QTM token: 0x2898dE208BC827089BD41131F09423E554c51a11
+//sep QTM token: 0xeAaeD7BC22672162Cb2114EA0b78A6162354c864
+//QTM arb sep: 0x9bD5bf31c44F7c81F6E6782447e00AE40CFFDcD6

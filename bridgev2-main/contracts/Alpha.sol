@@ -5,15 +5,15 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 
-contract USDCCToken is ERC20, Ownable, ERC20Permit {
+contract Quantum is ERC20, Ownable, ERC20Permit {
     constructor(
     )
-        ERC20("USDC Coin", "USDCC")
+        ERC20("Quantum Coin", "QTM")
         Ownable(msg.sender)
-        ERC20Permit("USDCC")
+        ERC20Permit("QTM")
     {}
 
-    function mint(address to, uint256 amount) public onlyOwner {
+    function mint(address to, uint256 amount) public {
         _mint(to, amount);
     }
 }
