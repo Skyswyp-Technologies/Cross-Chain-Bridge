@@ -24,7 +24,7 @@ const env = load({
 const COMPILER_SETTINGS = {
   optimizer: {
       enabled: true,
-      runs: 1000000,
+      runs: 100,
   },
   metadata: {
       bytecodeHash: "none",

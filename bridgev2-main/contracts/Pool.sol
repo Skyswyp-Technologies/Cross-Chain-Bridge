@@ -38,6 +38,7 @@ interface IPoolToken {
 
 error TransferFailed();
 error InsufficientTokenAmount();
+error InsufficientLiquidity();
 error InvalidAmount();
 error TokenNotSupported();
 error UserAddressNotFound();
@@ -236,8 +237,7 @@ contract Pool is
 
         emit BorrowTesting2(msg.sender, token.balanceOf(address(this)), amount);
 
-        if (token.balanceOf(msg.sender) < amount)
-            revert InsufficientTokenAmount();
+    if (token.balanceOf(address(this)) < amount) revert InsufficientLiquidity();
 
         token.transfer(msg.sender, amount);
 
@@ -405,14 +405,26 @@ contract Pool is
     }
 
    function interest(address tokenAddress, uint256 tokenBorrowed) public view returns (uint256) {
-    Token memory token = getTokenFrom(tokenAddress);
+    Token memory token = getTokenForBorrow(tokenAddress);
     return (tokenBorrowed * token.stableRate) / 1e18;
   }
 
-  function getTokenFrom(address tokenAddress) public view returns (Token memory) {
+  function getTokenForBorrow(address tokenAddress) public view returns (Token memory) {
     Token memory token;
     for (uint256 i = 0; i < tokensForBorrowing.length; i++) {
       Token memory currentToken = tokensForBorrowing[i];
+      if (currentToken.tokenAddress == tokenAddress) {
+        token = currentToken;
+        break;
+      }
+    }
+    return token;
+  }
+
+  function getTokenForSupply(address tokenAddress) public view returns (Token memory) {
+    Token memory token;
+    for (uint256 i = 0; i < tokensForLending.length; i++) {
+      Token memory currentToken = tokensForLending[i];
       if (currentToken.tokenAddress == tokenAddress) {
         token = currentToken;
         break;
@@ -486,7 +498,7 @@ contract Pool is
       address userLentTokenAddressFound = tokensLent[i][user];
 
       if (userLentTokenAddressFound != address(0)) {
-        Token memory currentTokenFound = getTokenFrom(userLentTokenAddressFound);
+        Token memory currentTokenFound = getTokenForSupply(userLentTokenAddressFound);
         uint256 tokenAmountLent = tokensLentAmount[userLentTokenAddressFound][user];
 
         uint256 tokenAmountLentInDollars = getAmountInDollars(
@@ -786,7 +798,7 @@ contract Pool is
     return (false, -1);
   }
 
-  function getTotalTokenSupplied(address tokenAddress) public view returns (uint256) {
+   function getTotalTokenSupplied(address tokenAddress) public view returns (uint256) {
     uint256 totalTokenSupplied = 0;
     if (lenders.length > 0) {
       for (uint256 i = 0; i < lenders.length; i++) {
@@ -808,6 +820,50 @@ contract Pool is
     }
     return (totalTokenBorrowed / 10 ** IERC20Metadata(tokenAddress).decimals());
   }
+
+  function getTotalTokensSupplied() public view returns (address[] memory, uint256[] memory) {
+    uint256 tokenCount = tokensForLending.length;
+    address[] memory tokenAddresses = new address[](tokenCount);
+    uint256[] memory totalAmountsSupplied = new uint256[](tokenCount);
+
+    for (uint256 i = 0; i < tokenCount; i++) {
+        address tokenAddress = tokensForLending[i].tokenAddress;
+        uint256 totalTokenSupplied = 0;
+
+        for (uint256 j = 0; j < lenders.length; j++) {
+            address currentLender = lenders[j];
+            totalTokenSupplied += tokensLentAmount[tokenAddress][currentLender];
+        }
+
+        tokenAddresses[i] = tokenAddress;
+        totalAmountsSupplied[i] = totalTokenSupplied / 10 ** IERC20Metadata(tokenAddress).decimals(); 
+    }
+
+    return (tokenAddresses, totalAmountsSupplied);
+}
+
+
+ function getTotalTokensBorrowed() public view returns (address[] memory, uint256[] memory) {
+    uint256 tokenCount = tokensForBorrowing.length;
+    address[] memory tokenAddresses = new address[](tokenCount);
+    uint256[] memory totalAmountsBorrowed = new uint256[](tokenCount);
+
+    for (uint256 i = 0; i < tokenCount; i++) {
+        address tokenAddress = tokensForBorrowing[i].tokenAddress;
+        uint256 totalTokenBorrowed = 0;
+
+        for (uint256 j = 0; j < borrowers.length; j++) {
+            address currentBorrower = borrowers[j];
+            totalTokenBorrowed += tokensBorrowedAmount[tokenAddress][currentBorrower];
+        }
+
+        tokenAddresses[i] = tokenAddress;
+        totalAmountsBorrowed[i] = totalTokenBorrowed / 10 ** IERC20Metadata(tokenAddress).decimals(); 
+    }
+
+    return (tokenAddresses, totalAmountsBorrowed);
+}
+
 
   function getTotalSupplyInDollars() public view returns (uint256) {
     uint256 totalSupplyInDollars = 0;
